@@ -1,4 +1,4 @@
-# gbn
+# Go-Back-N
 My implementation of a Go-Back-N protocol.
 
 This takes around 14 seconds to execute, the range I got was 8 seconds to 20 seconds.
