@@ -19,6 +19,7 @@ class GBN_sender:
         self.packet_timers = [0] * len(self.packets)
         self.dropped_list = []
         self.num_sent = 0
+        self.thread = True
         self.logger.info(f"{len(self.packets)} packets created, Window size: {self.window_size}, Packet length: {self.packet_len}, Nth packed to be dropped: {self.nth_packet}, Timeout interval: {self.timeout_interval}")
     
 
@@ -86,7 +87,7 @@ class GBN_sender:
     
 
     def receive_acks(self):
-        while True:
+        while (self.thread):
             try:
                 ack = self.ack_queue.get(timeout=0.01)
                 self.packet_timers[ack - 1] = 0
@@ -100,21 +101,21 @@ class GBN_sender:
                 continue
             except Exception as e:
                 print(e)
-            """
-            I needed to slow this function down a bit since it was shifting the
-            window before some previous packets were resent (after a timeout).
-            """
-            time.sleep(0.2)
     
+
+    def stop_thread(self):
+        self.thread = False
+
 
     def run(self):
         self.send_packets()
-        Thread(target=self.receive_acks, daemon=True).start()
+        Thread(target=self.receive_acks).start()
         while (self.base < len(self.packets)):
             if (self.check_timers() == True):
                 self.send_packets()
         self.send_queue.put(None)
         self.logger.info("Sender: All packets have been sent and acknowledgments processed.")
+        self.stop_thread()
 
 
 
