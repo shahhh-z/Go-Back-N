@@ -1,7 +1,9 @@
 # Go-Back-N
 My implementation of a Go-Back-N (GBN) protocol.
 
-This takes around 14 seconds to execute, the range I got was 8 seconds to 20 seconds.
+This takes around 14 seconds to execute, the range I got was 8 seconds to 16 seconds.
+
+Check out the (Selective Repeat)[https://github.com/shahhh-z/SelectiveRepeat] protocol.
 
 Update: Fixed threading.
 
